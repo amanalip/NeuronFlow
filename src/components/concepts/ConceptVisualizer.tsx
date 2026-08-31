@@ -2,6 +2,7 @@ import React from 'react';
 import { Concept } from '../../model/types';
 import { Category01Dispatcher } from './category01/Category01Dispatcher';
 import { Category02Dispatcher } from './category02/Category02Dispatcher';
+import { Category03Dispatcher } from './category03/Category03Dispatcher';
 import { Sparkles } from 'lucide-react';
 import styles from '../layout/MainCanvas.module.css';
 
@@ -16,6 +17,10 @@ export const ConceptVisualizer: React.FC<ConceptVisualizerProps> = ({ concept })
 
   if (concept.categoryNumber === 2) {
     return <Category02Dispatcher slug={concept.slug} />;
+  }
+
+  if (concept.categoryNumber === 3) {
+    return <Category03Dispatcher slug={concept.slug} />;
   }
 
   return (
