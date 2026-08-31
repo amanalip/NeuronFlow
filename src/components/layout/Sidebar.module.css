@@ -1,0 +1,174 @@
+.sidebar {
+  width: 320px;
+  height: 100%;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, width 0.2s ease;
+  overflow: hidden;
+  z-index: 15;
+}
+
+.sidebarClosed {
+  width: 0;
+  border-right: none;
+}
+
+.searchContainer {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.searchIcon {
+  color: var(--text-muted);
+}
+
+.searchInput {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+.categoryList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.categoryGroup {
+  margin-bottom: 8px;
+}
+
+.categoryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.categoryHeader:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.categoryTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.conceptList {
+  list-style: none;
+  margin-top: 4px;
+  padding-left: 12px;
+}
+
+.conceptItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.conceptItem:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.activeConcept {
+  background-color: var(--accent-muted);
+  color: var(--accent-color);
+  font-weight: 500;
+}
+
+.conceptInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conceptNumber {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  min-width: 20px;
+}
+
+.difficultyBadge {
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.badgeBeginner {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.badgeIntermediate {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.badgeAdvanced {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+.completedIcon {
+  color: var(--success-color);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 280px;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.5);
+    z-index: 30;
+  }
+  .sidebarClosed {
+    width: 0;
+    transform: translateX(-100%);
+  }
+}

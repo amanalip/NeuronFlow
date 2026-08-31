@@ -1,0 +1,7 @@
+import { test, expect } from '@playwright/test';
+
+test('has title and renders header', async ({ page }) => {
+  await page.goto('/');
+  await expect(page).toHaveTitle(/NeuronFlow/);
+  await expect(page.locator('header')).toBeVisible();
+});

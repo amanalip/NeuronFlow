@@ -1,0 +1,40 @@
+.container {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--bg-secondary);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.filename {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.copyBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  transition: color 0.15s ease;
+}
+
+.copyBtn:hover {
+  color: var(--text-primary);
+}
+
+.editorWrapper {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+}
