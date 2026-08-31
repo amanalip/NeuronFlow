@@ -1,7 +1,8 @@
 import React from 'react';
-import { CheckCircle2, ChevronLeft, ChevronRight, Sparkles, BookOpen } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
 import { Concept } from '../../model/types';
 import { useStore } from '../../store/useStore';
+import { ConceptVisualizer } from '../concepts/ConceptVisualizer';
 import styles from './MainCanvas.module.css';
 
 interface MainCanvasProps {
@@ -67,13 +68,7 @@ export const MainCanvas: React.FC<MainCanvasProps> = ({
       </div>
 
       <div className={styles.canvasBody}>
-        {children || (
-          <div className={styles.placeholderCard}>
-            <Sparkles size={36} color="var(--accent-color)" />
-            <h3>{concept.title} Interactive Visualization</h3>
-            <p style={{ color: 'var(--text-secondary)' }}>{concept.summary}</p>
-          </div>
-        )}
+        {children || <ConceptVisualizer concept={concept} />}
       </div>
 
       <footer className={styles.navBar}>
