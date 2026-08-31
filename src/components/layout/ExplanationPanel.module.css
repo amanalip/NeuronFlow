@@ -127,3 +127,19 @@
   text-align: center;
   margin-top: 40px;
 }
+
+@media (max-width: 900px) {
+  .panel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.5);
+    z-index: 30;
+  }
+  .panelClosed {
+    width: 0;
+    transform: translateX(100%);
+  }
+}

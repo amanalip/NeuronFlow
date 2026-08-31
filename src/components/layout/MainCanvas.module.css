@@ -16,12 +16,14 @@
   border-bottom: 1px solid var(--border-color);
   background-color: var(--bg-primary);
   flex-shrink: 0;
+  gap: 16px;
 }
 
 .titleArea {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
 }
 
 .breadcrumbs {
@@ -44,10 +46,43 @@
   color: var(--text-primary);
 }
 
+.conceptSummary {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
 .actionsRow {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+}
+
+.infoToggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  transition: all 0.15s ease;
+}
+
+.infoToggleBtn:hover {
+  color: var(--text-primary);
+  background-color: var(--border-color);
+}
+
+.infoToggleBtnActive {
+  background-color: var(--accent-muted);
+  color: var(--accent-color);
+  border-color: var(--accent-color);
 }
 
 .completeBtn {
@@ -60,6 +95,7 @@
   font-weight: 500;
   background-color: var(--bg-tertiary);
   color: var(--text-secondary);
+  border: 1px solid var(--border-color);
   transition: all 0.15s ease;
 }
 
@@ -81,6 +117,65 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.quickOverviewCard {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.quickOverviewHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.15s ease;
+}
+
+.quickOverviewHeader:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.quickOverviewTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quickOverviewContent {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+.quickOverviewSection {
+  color: var(--text-secondary);
+}
+
+.quickOverviewSection strong {
+  color: var(--accent-color);
+}
+
+.quickOverviewTakeaway {
+  padding: 8px 12px;
+  background-color: var(--bg-primary);
+  border-left: 3px solid var(--accent-color);
+  border-radius: 0 4px 4px 0;
+  color: var(--text-primary);
 }
 
 .placeholderCard {
@@ -131,4 +226,16 @@
 .navBtn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .topBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .actionsRow {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

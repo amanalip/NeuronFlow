@@ -1,5 +1,5 @@
-import React from 'react';
-import { CheckCircle2, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react';
+import React, { useState } from 'react';
+import { CheckCircle2, ChevronLeft, ChevronRight, BookOpen, Info, ChevronDown, ChevronUp } from 'lucide-react';
 import { Concept } from '../../model/types';
 import { useStore } from '../../store/useStore';
 import { ConceptVisualizer } from '../concepts/ConceptVisualizer';
@@ -20,7 +20,8 @@ export const MainCanvas: React.FC<MainCanvasProps> = ({
   children,
   onNavigate,
 }) => {
-  const { isConceptComplete, toggleConceptComplete } = useStore();
+  const { isConceptComplete, toggleConceptComplete, explanationOpen, toggleExplanation } = useStore();
+  const [showOverview, setShowOverview] = useState(false);
 
   if (!concept) {
     return (
@@ -54,9 +55,19 @@ export const MainCanvas: React.FC<MainCanvasProps> = ({
               #{concept.number} {concept.title}
             </h1>
           </div>
+          <p className={styles.conceptSummary}>{concept.summary}</p>
         </div>
 
         <div className={styles.actionsRow}>
+          <button
+            className={`${styles.infoToggleBtn} ${explanationOpen ? styles.infoToggleBtnActive : ''}`}
+            onClick={toggleExplanation}
+            title="Toggle technical explanation panel"
+            aria-label="Toggle technical explanation panel"
+          >
+            <Info size={16} />
+            <span>Explanation</span>
+          </button>
           <button
             className={`${styles.completeBtn} ${completed ? styles.completedActive : ''}`}
             onClick={() => toggleConceptComplete(concept.id)}
@@ -68,6 +79,39 @@ export const MainCanvas: React.FC<MainCanvasProps> = ({
       </div>
 
       <div className={styles.canvasBody}>
+        {/* Quick Concept Overview Card */}
+        <div className={styles.quickOverviewCard}>
+          <button
+            type="button"
+            className={styles.quickOverviewHeader}
+            onClick={() => setShowOverview((prev) => !prev)}
+            aria-expanded={showOverview}
+          >
+            <div className={styles.quickOverviewTitle}>
+              <Info size={16} color="var(--accent-color)" />
+              <span>Concept Overview & Key Takeaway</span>
+            </div>
+            {showOverview ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+
+          {showOverview && (
+            <div className={styles.quickOverviewContent}>
+              <div className={styles.quickOverviewSection}>
+                <strong>What It Is: </strong>
+                <span>{concept.explanation.what}</span>
+              </div>
+              <div className={styles.quickOverviewSection}>
+                <strong>Why It Matters: </strong>
+                <span>{concept.explanation.why}</span>
+              </div>
+              <div className={styles.quickOverviewTakeaway}>
+                <strong>Key Takeaway: </strong>
+                <span>{concept.explanation.keyTakeaway}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
         {children || <ConceptVisualizer concept={concept} />}
       </div>
 

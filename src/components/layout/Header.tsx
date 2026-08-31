@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Moon, Sun, Share2, Download, BookOpen, CheckCircle2 } from 'lucide-react';
+import { Menu, Moon, Sun, Share2, Download, BookOpen, CheckCircle2, Info } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import styles from './Header.module.css';
 
@@ -12,7 +12,7 @@ export const Header: React.FC<HeaderProps> = ({
   currentConceptTitle: _currentConceptTitle,
   totalConcepts = 215,
 }) => {
-  const { theme, toggleTheme, toggleSidebar, completedConcepts } = useStore();
+  const { theme, toggleTheme, toggleSidebar, completedConcepts, explanationOpen, toggleExplanation } = useStore();
   const completedCount = completedConcepts.size;
   const progressPercent = totalConcepts > 0 ? Math.round((completedCount / totalConcepts) * 100) : 0;
 
@@ -22,8 +22,8 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           className={styles.toggleBtn}
           onClick={toggleSidebar}
-          aria-label="Toggle sidebar"
-          title="Toggle sidebar"
+          aria-label="Toggle sidebar navigation"
+          title="Toggle sidebar navigation"
         >
           <Menu size={18} />
         </button>
@@ -50,6 +50,15 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className={styles.rightSection}>
+        <button
+          className={`${styles.actionBtn} ${explanationOpen ? styles.actionBtnActive : ''}`}
+          onClick={toggleExplanation}
+          aria-label="Toggle explanation panel"
+          title="Toggle explanation panel"
+        >
+          <Info size={15} />
+          <span>Info</span>
+        </button>
         <button
           className={styles.iconBtn}
           onClick={toggleTheme}
