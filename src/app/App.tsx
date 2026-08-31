@@ -6,7 +6,8 @@ import { ExplanationPanel } from '../components/layout/ExplanationPanel';
 import { useRouter } from './Router';
 import { useStore } from '../store/useStore';
 import { Concept } from '../model/types';
-import { initialCategories, initialConcepts } from '../model/initialData';
+import { CATEGORIES } from '../model/categories';
+import { CONCEPTS, getConceptBySlug } from '../model/concept-registry';
 import styles from './App.module.css';
 
 export const App: React.FC = () => {
@@ -19,20 +20,23 @@ export const App: React.FC = () => {
 
   // Find active concept
   const activeConcept = useMemo(() => {
-    if (!route.conceptSlug) {
-      return initialConcepts[0];
+    if (route.categorySlug && route.conceptSlug) {
+      const found = getConceptBySlug(route.categorySlug, route.conceptSlug);
+      if (found) return found;
     }
-    return (
-      initialConcepts.find(
+    if (route.conceptSlug) {
+      const found = CONCEPTS.find(
         (c) => c.slug === route.conceptSlug || c.id === route.conceptSlug
-      ) || initialConcepts[0]
-    );
-  }, [route.conceptSlug]);
+      );
+      if (found) return found;
+    }
+    return CONCEPTS[0];
+  }, [route.categorySlug, route.conceptSlug]);
 
-  const activeIndex = initialConcepts.findIndex((c) => c.id === activeConcept?.id);
-  const prevConcept = activeIndex > 0 ? initialConcepts[activeIndex - 1] : undefined;
+  const activeIndex = CONCEPTS.findIndex((c) => c.id === activeConcept?.id);
+  const prevConcept = activeIndex > 0 ? CONCEPTS[activeIndex - 1] : undefined;
   const nextConcept =
-    activeIndex < initialConcepts.length - 1 ? initialConcepts[activeIndex + 1] : undefined;
+    activeIndex < CONCEPTS.length - 1 ? CONCEPTS[activeIndex + 1] : undefined;
 
   const handleSelectConcept = (concept: Concept) => {
     navigate(concept.categorySlug, concept.slug);
@@ -40,11 +44,11 @@ export const App: React.FC = () => {
 
   return (
     <div className={styles.appShell}>
-      <Header currentConceptTitle={activeConcept?.title} totalConcepts={215} />
+      <Header currentConceptTitle={activeConcept?.title} totalConcepts={CONCEPTS.length} />
       <div className={styles.workspace}>
         <Sidebar
-          categories={initialCategories}
-          concepts={initialConcepts}
+          categories={CATEGORIES}
+          concepts={CONCEPTS}
           activeConceptId={activeConcept?.id}
           onSelectConcept={handleSelectConcept}
         />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, ChevronDown, ChevronRight, CheckCircle2, Circle } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { Concept, Category } from '../../model/types';
@@ -18,7 +18,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectConcept,
 }) => {
   const { sidebarOpen, searchQuery, setSearchQuery, isConceptComplete } = useStore();
-  const [openCategories, setOpenCategories] = useState<Record<number, boolean>>({ 1: true, 2: true });
+  const [openCategories, setOpenCategories] = useState<Record<number, boolean>>(() => {
+    const initial: Record<number, boolean> = {};
+    categories.forEach((cat) => {
+      initial[cat.number] = cat.number === 1;
+    });
+    return initial;
+  });
+
+  // Automatically open the category containing the active concept
+  useEffect(() => {
+    if (activeConceptId) {
+      const activeConcept = concepts.find((c) => c.id === activeConceptId);
+      if (activeConcept) {
+        setOpenCategories((prev) => ({
+          ...prev,
+          [activeConcept.categoryNumber]: true,
+        }));
+      }
+    }
+  }, [activeConceptId, concepts]);
 
   const toggleCategory = (catNum: number) => {
     setOpenCategories((prev) => ({ ...prev, [catNum]: !prev[catNum] }));
@@ -30,7 +49,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return (
       c.title.toLowerCase().includes(q) ||
       c.category.toLowerCase().includes(q) ||
-      c.summary.toLowerCase().includes(q)
+      c.summary.toLowerCase().includes(q) ||
+      `#${c.number}`.includes(q)
     );
   });
 
@@ -42,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <input
             type="text"
             className={styles.searchInput}
-            placeholder="Search 215 concepts..."
+            placeholder={`Search ${concepts.length} concepts...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -55,6 +75,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           if (searchQuery.trim() && catConcepts.length === 0) return null;
           const isOpen = searchQuery.trim() ? true : !!openCategories[cat.number];
 
+          // Compute category completed count
+          const completedInCat = catConcepts.filter((c) => isConceptComplete(c.id)).length;
+
           return (
             <div key={cat.number} className={styles.categoryGroup}>
               <button
@@ -63,9 +86,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <div className={styles.categoryTitle}>
                   {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                  <span>{cat.number}. {cat.title}</span>
+                  <span>
+                    {cat.number}. {cat.title}
+                  </span>
                 </div>
-                <span className={styles.conceptNumber}>{catConcepts.length}</span>
+                <span className={styles.conceptNumber}>
+                  {completedInCat > 0 ? `${completedInCat}/` : ''}
+                  {catConcepts.length}
+                </span>
               </button>
 
               {isOpen && (
