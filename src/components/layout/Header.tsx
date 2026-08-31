@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Moon, Sun, Share2, Download, BookOpen, CheckCircle2, Info, Search } from 'lucide-react';
+import { Menu, Moon, Sun, Share2, Download, BookOpen, CheckCircle2, Info, Search, Keyboard } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import styles from './Header.module.css';
 
@@ -7,12 +7,14 @@ interface HeaderProps {
   currentConceptTitle?: string;
   totalConcepts?: number;
   onOpenSearch?: () => void;
+  onOpenShortcuts?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentConceptTitle: _currentConceptTitle,
   totalConcepts = 215,
   onOpenSearch,
+  onOpenShortcuts,
 }) => {
   const { theme, toggleTheme, toggleSidebar, completedConcepts, explanationOpen, toggleExplanation } = useStore();
   const completedCount = completedConcepts.size;
@@ -62,6 +64,16 @@ export const Header: React.FC<HeaderProps> = ({
             <Search size={15} />
             <span>Search</span>
             <kbd style={{ fontSize: '0.65rem', padding: '1px 4px', background: 'var(--bg-primary)', borderRadius: '3px', border: '1px solid var(--border-color)' }}>Ctrl+K</kbd>
+          </button>
+        )}
+        {onOpenShortcuts && (
+          <button
+            className={styles.iconBtn}
+            onClick={onOpenShortcuts}
+            aria-label="Keyboard Shortcuts (?)"
+            title="Keyboard Shortcuts (?)"
+          >
+            <Keyboard size={16} />
           </button>
         )}
         <button

@@ -4,6 +4,7 @@ import { Sidebar } from '../components/layout/Sidebar';
 import { MainCanvas } from '../components/layout/MainCanvas';
 import { ExplanationPanel } from '../components/layout/ExplanationPanel';
 import { QuickSearchModal } from '../components/layout/QuickSearchModal';
+import { KeyboardShortcutsModal } from '../components/layout/KeyboardShortcutsModal';
 import { useRouter } from './Router';
 import { useStore } from '../store/useStore';
 import { Concept } from '../model/types';
@@ -15,23 +16,11 @@ export const App: React.FC = () => {
   const { route, navigate } = useRouter();
   const theme = useStore((state) => state.theme);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
-
-  // Global keyboard shortcuts (Ctrl+K or Cmd+K for search)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        setSearchOpen((prev) => !prev);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   // Find active concept
   const activeConcept = useMemo(() => {
@@ -57,12 +46,41 @@ export const App: React.FC = () => {
     navigate(concept.categorySlug, concept.slug);
   };
 
+  // Global keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept when focused inside inputs or textareas
+      const target = e.target as HTMLElement;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return;
+      }
+
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      } else if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+        e.preventDefault();
+        setShortcutsOpen((prev) => !prev);
+      } else if (e.key === 'ArrowLeft' && prevConcept && !searchOpen && !shortcutsOpen) {
+        e.preventDefault();
+        handleSelectConcept(prevConcept);
+      } else if (e.key === 'ArrowRight' && nextConcept && !searchOpen && !shortcutsOpen) {
+        e.preventDefault();
+        handleSelectConcept(nextConcept);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [prevConcept, nextConcept, searchOpen, shortcutsOpen]);
+
   return (
     <div className={styles.appShell}>
       <Header
         currentConceptTitle={activeConcept?.title}
         totalConcepts={CONCEPTS.length}
         onOpenSearch={() => setSearchOpen(true)}
+        onOpenShortcuts={() => setShortcutsOpen(true)}
       />
       <div className={styles.workspace}>
         <Sidebar
@@ -84,6 +102,11 @@ export const App: React.FC = () => {
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
         onSelectConcept={handleSelectConcept}
+      />
+
+      <KeyboardShortcutsModal
+        isOpen={shortcutsOpen}
+        onClose={() => setShortcutsOpen(false)}
       />
     </div>
   );
