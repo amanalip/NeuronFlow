@@ -14,6 +14,7 @@ import { Category11Dispatcher } from './category11/Category11Dispatcher';
 import { Category12Dispatcher } from './category12/Category12Dispatcher';
 import { Category13Dispatcher } from './category13/Category13Dispatcher';
 import { Category14Dispatcher } from './category14/Category14Dispatcher';
+import { Category15Dispatcher } from './category15/Category15Dispatcher';
 import { Sparkles } from 'lucide-react';
 import styles from '../layout/MainCanvas.module.css';
 
@@ -76,6 +77,10 @@ export const ConceptVisualizer: React.FC<ConceptVisualizerProps> = ({ concept })
 
   if (concept.categoryNumber === 14) {
     return <Category14Dispatcher concept={concept} />;
+  }
+
+  if (concept.categoryNumber === 15) {
+    return <Category15Dispatcher concept={concept} />;
   }
 
   return (
