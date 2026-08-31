@@ -1,16 +1,18 @@
 import React from 'react';
-import { Menu, Moon, Sun, Share2, Download, BookOpen, CheckCircle2, Info } from 'lucide-react';
+import { Menu, Moon, Sun, Share2, Download, BookOpen, CheckCircle2, Info, Search } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import styles from './Header.module.css';
 
 interface HeaderProps {
   currentConceptTitle?: string;
   totalConcepts?: number;
+  onOpenSearch?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   currentConceptTitle: _currentConceptTitle,
   totalConcepts = 215,
+  onOpenSearch,
 }) => {
   const { theme, toggleTheme, toggleSidebar, completedConcepts, explanationOpen, toggleExplanation } = useStore();
   const completedCount = completedConcepts.size;
@@ -50,6 +52,18 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className={styles.rightSection}>
+        {onOpenSearch && (
+          <button
+            className={styles.actionBtn}
+            onClick={onOpenSearch}
+            aria-label="Open global search (Ctrl+K)"
+            title="Search concepts and AI glossary (Ctrl+K)"
+          >
+            <Search size={15} />
+            <span>Search</span>
+            <kbd style={{ fontSize: '0.65rem', padding: '1px 4px', background: 'var(--bg-primary)', borderRadius: '3px', border: '1px solid var(--border-color)' }}>Ctrl+K</kbd>
+          </button>
+        )}
         <button
           className={`${styles.actionBtn} ${explanationOpen ? styles.actionBtnActive : ''}`}
           onClick={toggleExplanation}

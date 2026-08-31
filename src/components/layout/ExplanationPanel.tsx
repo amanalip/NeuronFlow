@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Copy, Check, ExternalLink, X, BookMarked } from 'lucide-react';
+import { Copy, Check, ExternalLink, X, BookMarked, ArrowRight } from 'lucide-react';
 import { Concept } from '../../model/types';
 import { useStore } from '../../store/useStore';
+import { getRelatedConceptNumbers } from '../../model/glossary';
+import { CONCEPTS } from '../../model/concept-registry';
 import styles from './ExplanationPanel.module.css';
 
 interface ExplanationPanelProps {
@@ -36,6 +38,11 @@ export const ExplanationPanel: React.FC<ExplanationPanelProps> = ({ concept }) =
       setTimeout(() => setCopied(false), 2000);
     }
   };
+
+  const relatedNumbers = concept ? getRelatedConceptNumbers(concept.number) : [];
+  const relatedConcepts = relatedNumbers
+    .map((num) => CONCEPTS.find((c) => c.number === num))
+    .filter((c): c is Concept => !!c);
 
   return (
     <aside className={`${styles.panel} ${!explanationOpen ? styles.panelClosed : ''}`}>
@@ -96,6 +103,40 @@ export const ExplanationPanel: React.FC<ExplanationPanelProps> = ({ concept }) =
                 {concept.explanation.keyTakeaway}
               </div>
             </div>
+
+            {/* Related Concepts (See Also) Cross-References */}
+            {relatedConcepts.length > 0 && (
+              <div className={styles.section}>
+                <div className={styles.sectionTitle}>See Also & Related Concepts</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '6px' }}>
+                  {relatedConcepts.map((rc) => (
+                    <button
+                      key={rc.id}
+                      type="button"
+                      onClick={() => {
+                        window.location.hash = `#/${rc.categorySlug}/${rc.slug}`;
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '6px 10px',
+                        borderRadius: '4px',
+                        backgroundColor: 'var(--bg-primary)',
+                        border: '1px solid var(--border-color)',
+                        color: 'var(--text-primary)',
+                        fontSize: '0.75rem',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <span>#{rc.number} {rc.title}</span>
+                      <ArrowRight size={12} color="var(--accent-color)" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {concept.explanation.sources && concept.explanation.sources.length > 0 && (
               <div className={styles.section}>
