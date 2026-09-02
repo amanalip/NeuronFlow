@@ -2,11 +2,12 @@
   width: 100%;
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
 }
 
 .chartHeader {
@@ -16,14 +17,16 @@
 }
 
 .chartTitle {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 
 .chartSubtitle {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .barsWrapper {
@@ -43,6 +46,7 @@
 .tokenLabel {
   width: 90px;
   font-family: var(--font-mono);
+  font-size: 0.78rem;
   color: var(--text-primary);
   text-align: right;
   overflow: hidden;
@@ -52,9 +56,9 @@
 
 .barTrack {
   flex: 1;
-  height: 22px;
+  height: 24px;
   background-color: var(--bg-primary);
-  border-radius: 4px;
+  border-radius: 6px;
   overflow: hidden;
   position: relative;
   border: 1px solid var(--border-color);
@@ -63,16 +67,17 @@
 .barFill {
   height: 100%;
   background: linear-gradient(90deg, var(--accent-muted), var(--accent-color));
-  border-radius: 3px;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 5px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 6px;
+  padding-right: 8px;
 }
 
 .barFillTop {
   background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), var(--success-color));
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
 }
 
 .percentLabel {
@@ -80,12 +85,13 @@
   font-family: var(--font-mono);
   color: #ffffff;
   font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .valLabel {
   width: 55px;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   text-align: left;
 }
