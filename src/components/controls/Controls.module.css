@@ -234,7 +234,7 @@
 .buttonGroup {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -242,31 +242,46 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 500;
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   transition: all 0.15s ease;
+  cursor: pointer;
 }
 
-.actionBtn:hover {
+.actionBtn:hover:not(:disabled) {
   background-color: var(--accent-muted);
   border-color: var(--accent-color);
   color: var(--accent-color);
+}
+
+.actionBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.actionBtnActive {
+  background-color: var(--accent-muted);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  font-weight: 600;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.25);
 }
 
 /* Control Panel */
 .panelContainer {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: 12px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  box-shadow: var(--shadow-sm);
 }
 
 .panelHeader {
@@ -274,26 +289,35 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-color);
-  padding-bottom: 8px;
+  padding-bottom: 10px;
 }
 
 .panelTitle {
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 
 .resetBtn {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.75rem;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 500;
   color: var(--text-muted);
-  transition: color 0.15s ease;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .resetBtn:hover {
   color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-hover);
 }
 
 .controlsBody {

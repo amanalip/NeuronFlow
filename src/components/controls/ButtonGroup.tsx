@@ -20,7 +20,7 @@ export const ButtonGroup: React.FC<ButtonGroupProps> = ({ actions }) => {
         <button
           key={idx}
           type="button"
-          className={styles.actionBtn}
+          className={`${styles.actionBtn} ${act.active ? styles.actionBtnActive : ''}`}
           onClick={act.onClick}
           disabled={act.disabled}
         >
