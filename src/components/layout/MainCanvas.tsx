@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, ChevronLeft, ChevronRight, BookOpen, Info, ChevronDown, ChevronUp, Clock, AlertCircle } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, ChevronRight, BookOpen, Info, Clock, AlertCircle } from 'lucide-react';
 import { Concept } from '../../model/types';
 import { useStore } from '../../store/useStore';
 import { ConceptVisualizer } from '../concepts/ConceptVisualizer';
@@ -54,80 +54,81 @@ export const MainCanvas: React.FC<MainCanvasProps> = ({
     <main className={styles.canvasContainer}>
       <div className={styles.topBar}>
         <div className={styles.titleArea}>
-          <div className={styles.breadcrumbs}>
-            <span>Category {concept.categoryNumber}</span>
-            <span>/</span>
-            <span>{concept.category}</span>
-            <span>&bull;</span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--accent-color)' }}>
+          <div className={styles.metaRow}>
+            <span className={styles.categoryPill}>
+              Category {concept.categoryNumber}: {concept.category}
+            </span>
+            <span className={`${styles.difficultyPill} ${
+              concept.difficulty === 'Beginner'
+                ? styles.diffBeginner
+                : concept.difficulty === 'Intermediate'
+                ? styles.diffIntermediate
+                : styles.diffAdvanced
+            }`}>
+              {concept.difficulty}
+            </span>
+            <span className={styles.readTimePill}>
               <Clock size={12} />
               {readMinutes} min read
             </span>
           </div>
+
           <div className={styles.titleRow}>
-            <h1 className={styles.conceptHeading}>
-              #{concept.number} {concept.title}
-            </h1>
+            <span className={styles.conceptNumberTag}>#{concept.number}</span>
+            <h1 className={styles.conceptHeading}>{concept.title}</h1>
           </div>
+
           <p className={styles.conceptSummary}>{concept.summary}</p>
         </div>
 
         <div className={styles.actionsRow}>
           <button
-            className={`${styles.infoToggleBtn} ${explanationOpen ? styles.infoToggleBtnActive : ''}`}
+            className={`${styles.actionBtn} ${showOverview ? styles.actionBtnActive : ''}`}
+            onClick={() => setShowOverview((prev) => !prev)}
+            title="Toggle quick overview and key takeaway"
+            aria-label="Toggle quick overview"
+          >
+            <BookOpen size={15} />
+            <span>Overview</span>
+          </button>
+
+          <button
+            className={`${styles.actionBtn} ${explanationOpen ? styles.actionBtnActive : ''}`}
             onClick={toggleExplanation}
-            title="Toggle technical explanation panel"
+            title="Toggle technical explanation drawer"
             aria-label="Toggle technical explanation panel"
           >
-            <Info size={16} />
+            <Info size={15} />
             <span>Explanation</span>
           </button>
+
           <button
             className={`${styles.completeBtn} ${completed ? styles.completedActive : ''}`}
             onClick={() => toggleConceptComplete(concept.id)}
+            title={completed ? 'Mark as incomplete' : 'Mark concept as completed'}
+            aria-label={completed ? 'Completed' : 'Mark as complete'}
           >
-            <CheckCircle2 size={16} />
-            <span>{completed ? 'Completed' : 'Mark as complete'}</span>
+            <CheckCircle2 size={15} />
+            <span>{completed ? 'Completed' : 'Mark Complete'}</span>
           </button>
         </div>
       </div>
 
       <div className={styles.canvasBody}>
-        {/* Prerequisite gentle reminder if any prerequisite is incomplete */}
+        {/* Prerequisite banner if any prerequisite is incomplete */}
         {incompletePrereqs.length > 0 && (
-          <div
-            style={{
-              padding: '10px 14px',
-              backgroundColor: 'rgba(56, 189, 248, 0.08)',
-              border: '1px solid rgba(56, 189, 248, 0.25)',
-              borderRadius: '8px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              fontSize: '0.78rem',
-              color: 'var(--text-primary)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <AlertCircle size={16} color="#38bdf8" />
-              <span>
-                <strong>Prerequisite Suggestion:</strong> You might want to check out{' '}
+          <div className={styles.prereqBanner}>
+            <div className={styles.prereqLeft}>
+              <AlertCircle size={15} className={styles.prereqIcon} />
+              <span className={styles.prereqText}>
+                <strong>Recommended Prerequisite:</strong> Consider exploring{' '}
                 {incompletePrereqs.map((pr, idx) => (
                   <React.Fragment key={pr.id}>
                     {idx > 0 && ', '}
                     <button
                       type="button"
                       onClick={() => onNavigate?.(pr)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: 'var(--accent-color)',
-                        textDecoration: 'underline',
-                        cursor: 'pointer',
-                        fontWeight: 600,
-                        padding: 0,
-                        font: 'inherit',
-                      }}
+                      className={styles.prereqLink}
                     >
                       #{pr.number} {pr.title}
                     </button>
@@ -139,38 +140,23 @@ export const MainCanvas: React.FC<MainCanvasProps> = ({
           </div>
         )}
 
-        {/* Quick Concept Overview Card */}
-        <div className={styles.quickOverviewCard}>
-          <button
-            type="button"
-            className={styles.quickOverviewHeader}
-            onClick={() => setShowOverview((prev) => !prev)}
-            aria-expanded={showOverview}
-          >
-            <div className={styles.quickOverviewTitle}>
-              <Info size={16} color="var(--accent-color)" />
-              <span>Concept Overview & Key Takeaway</span>
+        {/* Quick Concept Overview Accordion */}
+        {showOverview && (
+          <div className={styles.overviewGrid}>
+            <div className={styles.overviewCard}>
+              <div className={styles.overviewCardLabel}>What It Is</div>
+              <p className={styles.overviewCardText}>{concept.explanation.what}</p>
             </div>
-            {showOverview ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </button>
-
-          {showOverview && (
-            <div className={styles.quickOverviewContent}>
-              <div className={styles.quickOverviewSection}>
-                <strong>What It Is: </strong>
-                <span>{concept.explanation.what}</span>
-              </div>
-              <div className={styles.quickOverviewSection}>
-                <strong>Why It Matters: </strong>
-                <span>{concept.explanation.why}</span>
-              </div>
-              <div className={styles.quickOverviewTakeaway}>
-                <strong>Key Takeaway: </strong>
-                <span>{concept.explanation.keyTakeaway}</span>
-              </div>
+            <div className={styles.overviewCard}>
+              <div className={styles.overviewCardLabel}>Why It Matters</div>
+              <p className={styles.overviewCardText}>{concept.explanation.why}</p>
             </div>
-          )}
-        </div>
+            <div className={`${styles.overviewCard} ${styles.overviewCardHighlight}`}>
+              <div className={styles.overviewCardLabel}>Key Takeaway</div>
+              <p className={styles.overviewCardText}>{concept.explanation.keyTakeaway}</p>
+            </div>
+          </div>
+        )}
 
         {children || <ConceptVisualizer concept={concept} />}
       </div>
