@@ -17,13 +17,13 @@ export const Toggle: React.FC<ToggleProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className={styles.controlGroup}>
+    <div className={`${styles.controlGroup} ${disabled ? styles.controlDisabled : ''}`}>
       <div
         className={styles.toggleRow}
         onClick={() => !disabled && onChange(!checked)}
         role="switch"
         aria-checked={checked}
-        tabIndex={0}
+        tabIndex={disabled ? -1 : 0}
         onKeyDown={(e) => {
           if (e.key === ' ' || e.key === 'Enter') {
             e.preventDefault();
@@ -31,10 +31,10 @@ export const Toggle: React.FC<ToggleProps> = ({
           }
         }}
       >
-        <div>
-          <span style={{ fontSize: '0.82rem', fontWeight: 500 }}>{label}</span>
+        <div className={styles.toggleLabelCol}>
+          <span className={styles.toggleLabel}>{label}</span>
           {description && (
-            <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+            <div className={styles.toggleDesc}>
               {description}
             </div>
           )}

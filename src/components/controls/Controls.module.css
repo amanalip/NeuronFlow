@@ -6,20 +6,36 @@
   width: 100%;
 }
 
+.controlDisabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .labelRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.controlLabel {
+  font-size: 0.78rem;
   font-weight: 500;
   color: var(--text-secondary);
 }
 
 .valueDisplay {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: var(--accent-color);
   font-weight: 600;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  padding: 1px 7px;
+  border-radius: 5px;
+  box-shadow: var(--shadow-sm);
 }
 
 /* Slider */
@@ -29,9 +45,15 @@
   width: 100%;
   height: 6px;
   background: var(--bg-tertiary);
-  border-radius: 3px;
+  border-radius: 9999px;
   outline: none;
   cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.slider:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
 }
 
 .slider::-webkit-slider-thumb {
@@ -42,28 +64,43 @@
   border-radius: 50%;
   background: var(--accent-color);
   cursor: pointer;
-  box-shadow: 0 0 4px rgba(56, 189, 248, 0.4);
-  transition: transform 0.1s ease;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .slider::-webkit-slider-thumb:hover {
   transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+  transition: transform 0.12s ease;
 }
 
 /* Select */
 .selectInput {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 0.82rem;
+  border-radius: 7px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
   color: var(--text-primary);
   outline: none;
   cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .selectInput:focus {
   border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
 /* Toggle */
@@ -73,31 +110,54 @@
   justify-content: space-between;
   cursor: pointer;
   user-select: none;
+  gap: 12px;
+}
+
+.toggleLabelCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.toggleLabel {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.toggleDesc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.3;
 }
 
 .toggleSwitch {
-  width: 36px;
-  height: 20px;
+  width: 38px;
+  height: 22px;
   background-color: var(--bg-tertiary);
-  border-radius: 10px;
+  border-radius: 11px;
   position: relative;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
   border: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .toggleSwitchOn {
   background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
 }
 
 .toggleThumb {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   background-color: #ffffff;
   border-radius: 50%;
   position: absolute;
   top: 2px;
   left: 2px;
-  transition: transform 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .toggleThumbOn {
@@ -109,15 +169,15 @@
   display: flex;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 2px;
-  gap: 2px;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 3px;
 }
 
 .segmentedBtn {
   flex: 1;
-  padding: 6px 8px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 5px;
   font-size: 0.78rem;
   font-weight: 500;
   color: var(--text-secondary);
@@ -134,7 +194,7 @@
   background-color: var(--bg-tertiary);
   color: var(--accent-color);
   font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Text Input */
