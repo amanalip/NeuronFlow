@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  transition: transform 0.2s ease, width 0.2s ease;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
   z-index: 15;
 }
@@ -19,7 +19,11 @@
 .searchContainer {
   padding: 12px;
   border-bottom: 1px solid var(--border-color);
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--bg-secondary);
+  flex-shrink: 0;
 }
 
 .searchWrapper {
@@ -28,19 +32,26 @@
   gap: 8px;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   padding: 6px 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.searchWrapper:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-muted);
 }
 
 .searchIcon {
   color: var(--text-muted);
+  flex-shrink: 0;
 }
 
 .searchInput {
   width: 100%;
   border: none;
   background: transparent;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-primary);
   outline: none;
 }
@@ -49,14 +60,44 @@
   color: var(--text-muted);
 }
 
+.clearSearchBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.clearSearchBtn:hover {
+  color: var(--text-primary);
+  background: var(--border-color);
+}
+
+.searchSummary {
+  font-size: 0.72rem;
+  color: var(--accent-color);
+  font-family: var(--font-mono);
+  padding: 0 4px;
+}
+
 .categoryList {
   flex: 1;
   overflow-y: auto;
-  padding: 8px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .categoryGroup {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .categoryHeader {
@@ -65,12 +106,14 @@
   justify-content: space-between;
   width: 100%;
   padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 0.82rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
   text-align: left;
-  transition: background-color 0.15s ease;
+  background-color: transparent;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
 }
 
 .categoryHeader:hover {
@@ -78,16 +121,87 @@
   color: var(--text-primary);
 }
 
+.categoryHeaderOpen {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
 .categoryTitle {
   display: flex;
   align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(90deg);
+  color: var(--accent-color);
+}
+
+.catBadge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  background: var(--accent-muted);
+  padding: 1px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.catName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.catStatus {
+  display: flex;
+  align-items: center;
   gap: 6px;
+  flex-shrink: 0;
+}
+
+.completedBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--success-color);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.conceptCounter {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.completedCount {
+  color: var(--success-color);
+  font-weight: 600;
 }
 
 .conceptList {
   list-style: none;
-  margin-top: 4px;
-  padding-left: 12px;
+  margin-top: 3px;
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .conceptItem {
@@ -96,11 +210,12 @@
   justify-content: space-between;
   padding: 6px 10px;
   border-radius: 6px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   text-decoration: none;
+  border: 1px solid transparent;
   transition: all 0.15s ease;
-  margin-bottom: 2px;
+  position: relative;
 }
 
 .conceptItem:hover {
@@ -113,48 +228,69 @@
   background-color: var(--accent-muted);
   color: var(--accent-color);
   font-weight: 500;
+  border-color: rgba(56, 189, 248, 0.25);
+  box-shadow: inset 3px 0 0 var(--accent-color);
 }
 
 .conceptInfo {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.conceptNumber {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
+}
+
+.conceptTitle {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.conceptNumber {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  min-width: 20px;
-}
-
 .difficultyBadge {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   padding: 1px 6px;
-  border-radius: 10px;
-  font-weight: 500;
+  border-radius: 9999px;
+  font-weight: 600;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
 }
 
 .badgeBeginner {
-  background-color: rgba(16, 185, 129, 0.15);
+  background-color: rgba(16, 185, 129, 0.12);
   color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .badgeIntermediate {
-  background-color: rgba(245, 158, 11, 0.15);
+  background-color: rgba(245, 158, 11, 0.12);
   color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .badgeAdvanced {
-  background-color: rgba(239, 68, 68, 0.15);
+  background-color: rgba(239, 68, 68, 0.12);
   color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .completedIcon {
   color: var(--success-color);
+  flex-shrink: 0;
+}
+
+.uncompletedIcon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  opacity: 0.5;
 }
 
 @media (max-width: 768px) {
@@ -163,8 +299,8 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 280px;
-    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.5);
+    width: 290px;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6);
     z-index: 30;
   }
   .sidebarClosed {

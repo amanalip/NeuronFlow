@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, ChevronDown, ChevronRight, CheckCircle2, Circle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, ChevronRight, CheckCircle2, Circle, X, Check } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { Concept, Category } from '../../model/types';
 import styles from './Sidebar.module.css';
@@ -18,6 +18,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectConcept,
 }) => {
   const { sidebarOpen, searchQuery, setSearchQuery, isConceptComplete } = useStore();
+  const activeItemRef = useRef<HTMLAnchorElement>(null);
+
   const [openCategories, setOpenCategories] = useState<Record<number, boolean>>(() => {
     const initial: Record<number, boolean> = {};
     categories.forEach((cat) => {
@@ -26,7 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     return initial;
   });
 
-  // Automatically open the category containing the active concept
+  // Automatically open category containing the active concept and scroll to it
   useEffect(() => {
     if (activeConceptId) {
       const activeConcept = concepts.find((c) => c.id === activeConceptId);
@@ -38,6 +40,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       }
     }
   }, [activeConceptId, concepts]);
+
+  useEffect(() => {
+    if (activeItemRef.current && typeof activeItemRef.current.scrollIntoView === 'function') {
+      activeItemRef.current.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, [activeConceptId]);
 
   const toggleCategory = (catNum: number) => {
     setOpenCategories((prev) => ({ ...prev, [catNum]: !prev[catNum] }));
@@ -65,8 +73,26 @@ export const Sidebar: React.FC<SidebarProps> = ({
             placeholder={`Search ${concepts.length} concepts...`}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setSearchQuery('');
+            }}
           />
+          {searchQuery && (
+            <button
+              className={styles.clearSearchBtn}
+              onClick={() => setSearchQuery('')}
+              aria-label="Clear search input"
+              title="Clear search"
+            >
+              <X size={12} />
+            </button>
+          )}
         </div>
+        {searchQuery.trim() && (
+          <div className={styles.searchSummary}>
+            {filteredConcepts.length} {filteredConcepts.length === 1 ? 'concept' : 'concepts'} found
+          </div>
+        )}
       </div>
 
       <div className={styles.categoryList}>
@@ -75,25 +101,36 @@ export const Sidebar: React.FC<SidebarProps> = ({
           if (searchQuery.trim() && catConcepts.length === 0) return null;
           const isOpen = searchQuery.trim() ? true : !!openCategories[cat.number];
 
-          // Compute category completed count
           const completedInCat = catConcepts.filter((c) => isConceptComplete(c.id)).length;
+          const isAllCompleted = catConcepts.length > 0 && completedInCat === catConcepts.length;
 
           return (
             <div key={cat.number} className={styles.categoryGroup}>
               <button
-                className={styles.categoryHeader}
+                className={`${styles.categoryHeader} ${isOpen ? styles.categoryHeaderOpen : ''}`}
                 onClick={() => toggleCategory(cat.number)}
+                aria-expanded={isOpen}
               >
                 <div className={styles.categoryTitle}>
-                  {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                  <span>
-                    {cat.number}. {cat.title}
+                  <span className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ''}`}>
+                    <ChevronRight size={13} />
+                  </span>
+                  <span className={styles.catBadge}>{cat.number}</span>
+                  <span className={styles.catName}>{cat.title}</span>
+                </div>
+                <div className={styles.catStatus}>
+                  {isAllCompleted ? (
+                    <span className={styles.completedBadge} title="Category fully completed">
+                      <Check size={11} />
+                    </span>
+                  ) : null}
+                  <span className={styles.conceptCounter}>
+                    {completedInCat > 0 ? (
+                      <span className={styles.completedCount}>{completedInCat}/</span>
+                    ) : null}
+                    {catConcepts.length}
                   </span>
                 </div>
-                <span className={styles.conceptNumber}>
-                  {completedInCat > 0 ? `${completedInCat}/` : ''}
-                  {catConcepts.length}
-                </span>
               </button>
 
               {isOpen && (
@@ -112,6 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     return (
                       <li key={concept.id}>
                         <a
+                          ref={isActive ? activeItemRef : undefined}
                           href={`#/${concept.categorySlug}/${concept.slug}`}
                           className={`${styles.conceptItem} ${isActive ? styles.activeConcept : ''}`}
                           onClick={() => onSelectConcept?.(concept)}
@@ -120,10 +158,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             {completed ? (
                               <CheckCircle2 size={13} className={styles.completedIcon} />
                             ) : (
-                              <Circle size={13} color="var(--text-muted)" />
+                              <Circle size={13} className={styles.uncompletedIcon} />
                             )}
                             <span className={styles.conceptNumber}>#{concept.number}</span>
-                            <span>{concept.title}</span>
+                            <span className={styles.conceptTitle}>{concept.title}</span>
                           </div>
                           <span className={`${styles.difficultyBadge} ${badgeClass}`}>
                             {concept.difficulty}
