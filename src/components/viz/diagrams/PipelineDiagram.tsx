@@ -3,6 +3,7 @@ import {
   ReactFlow,
   Background,
   Controls,
+  MiniMap,
   Node,
   Edge,
   Position,
@@ -34,6 +35,7 @@ interface PipelineDiagramProps {
   connections: PipelineConnection[];
   direction?: 'horizontal' | 'vertical';
   height?: number | string;
+  showMiniMap?: boolean;
 }
 
 interface NodeData {
@@ -97,6 +99,7 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
   connections,
   direction = 'horizontal',
   height = 320,
+  showMiniMap = false,
 }) => {
   const nodeTypes = useMemo(() => ({ custom: CustomNodeComponent }), []);
 
@@ -172,6 +175,23 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
             color="var(--border-color)"
           />
           <Controls showInteractive={false} />
+          {showMiniMap && (
+            <MiniMap
+              nodeStrokeColor={(n) => {
+                const data = n.data as NodeData | undefined;
+                if (data?.role === 'input') return '#34d399';
+                if (data?.role === 'output') return '#a855f7';
+                if (data?.role === 'operation') return '#fbbf24';
+                return '#38bdf8';
+              }}
+              nodeColor={(n) => {
+                const data = n.data as NodeData | undefined;
+                if (data?.active) return 'var(--accent-color)';
+                return 'var(--bg-tertiary)';
+              }}
+              maskColor="rgba(15, 23, 42, 0.6)"
+            />
+          )}
         </ReactFlow>
       </div>
     </div>
