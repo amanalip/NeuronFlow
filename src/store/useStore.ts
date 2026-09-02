@@ -70,7 +70,7 @@ export const useStore = create<UIState & ProgressState & ConceptControlState>((s
   sidebarOpen: true,
   setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
   toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
-  explanationOpen: true,
+  explanationOpen: false,
   setExplanationOpen: (explanationOpen) => set({ explanationOpen }),
   toggleExplanation: () => set((state) => ({ explanationOpen: !state.explanationOpen })),
   searchQuery: '',

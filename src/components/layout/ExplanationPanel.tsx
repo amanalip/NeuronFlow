@@ -108,7 +108,7 @@ export const ExplanationPanel: React.FC<ExplanationPanelProps> = ({ concept }) =
             {relatedConcepts.length > 0 && (
               <div className={styles.section}>
                 <div className={styles.sectionTitle}>See Also & Related Concepts</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '6px' }}>
+                <div className={styles.relatedConceptList}>
                   {relatedConcepts.map((rc) => (
                     <button
                       key={rc.id}
@@ -116,22 +116,10 @@ export const ExplanationPanel: React.FC<ExplanationPanelProps> = ({ concept }) =
                       onClick={() => {
                         window.location.hash = `#/${rc.categorySlug}/${rc.slug}`;
                       }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '6px 10px',
-                        borderRadius: '4px',
-                        backgroundColor: 'var(--bg-primary)',
-                        border: '1px solid var(--border-color)',
-                        color: 'var(--text-primary)',
-                        fontSize: '0.75rem',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                      }}
+                      className={styles.relatedConceptBtn}
                     >
-                      <span>#{rc.number} {rc.title}</span>
-                      <ArrowRight size={12} color="var(--accent-color)" />
+                      <span className={styles.relatedConceptTitle}>#{rc.number} {rc.title}</span>
+                      <ArrowRight size={13} className={styles.relatedConceptIcon} />
                     </button>
                   ))}
                 </div>
