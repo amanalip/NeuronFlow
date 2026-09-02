@@ -42,9 +42,9 @@ export const App: React.FC = () => {
   const nextConcept =
     activeIndex < CONCEPTS.length - 1 ? CONCEPTS[activeIndex + 1] : undefined;
 
-  const handleSelectConcept = (concept: Concept) => {
+  const handleSelectConcept = React.useCallback((concept: Concept) => {
     navigate(concept.categorySlug, concept.slug);
-  };
+  }, [navigate]);
 
   // Global keyboard shortcuts
   useEffect(() => {
@@ -72,7 +72,7 @@ export const App: React.FC = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [prevConcept, nextConcept, searchOpen, shortcutsOpen]);
+  }, [prevConcept, nextConcept, searchOpen, shortcutsOpen, handleSelectConcept]);
 
   return (
     <div className={styles.appShell}>
