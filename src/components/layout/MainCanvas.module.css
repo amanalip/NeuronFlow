@@ -283,34 +283,89 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 22px;
+  padding: 10px 22px;
   border-top: 1px solid var(--border-color);
   background-color: var(--bg-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   flex-shrink: 0;
+  gap: 12px;
 }
 
 .navBtn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 7px 14px;
   border-radius: 8px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 500;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   transition: all 0.15s ease;
+  max-width: 320px;
+  min-width: 0;
 }
 
 .navBtn:hover:not(:disabled) {
   background-color: var(--bg-tertiary);
-  border-color: var(--accent-color);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-sm);
 }
 
 .navBtn:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
+}
+
+.navKbd {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 1px 5px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.navBtnText {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navBtnNum {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--accent-color);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.navBtnTitle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.navCenterHint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 860px) {
@@ -322,5 +377,17 @@
   .actionsRow {
     width: 100%;
     justify-content: flex-start;
+  }
+  .navCenter {
+    display: none;
+  }
+  .navBtn {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 580px) {
+  .navBtnTitle {
+    display: none;
   }
 }

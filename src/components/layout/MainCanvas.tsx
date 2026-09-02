@@ -166,21 +166,45 @@ export const MainCanvas: React.FC<MainCanvasProps> = ({
           className={styles.navBtn}
           disabled={!prevConcept}
           onClick={() => prevConcept && onNavigate?.(prevConcept)}
+          title={prevConcept ? `Previous: #${prevConcept.number} ${prevConcept.title} (←)` : 'No previous concept'}
+          aria-label="Navigate to previous concept"
         >
           <ChevronLeft size={16} />
-          <span>
-            {prevConcept ? `#${prevConcept.number} ${prevConcept.title}` : 'Previous'}
+          <kbd className={styles.navKbd}>←</kbd>
+          <span className={styles.navBtnText}>
+            {prevConcept ? (
+              <>
+                <span className={styles.navBtnNum}>#{prevConcept.number}</span>
+                <span className={styles.navBtnTitle}>{prevConcept.title}</span>
+              </>
+            ) : (
+              'First Concept'
+            )}
           </span>
         </button>
+
+        <div className={styles.navCenter}>
+          <span className={styles.navCenterHint}>Navigate with arrow keys</span>
+        </div>
 
         <button
           className={styles.navBtn}
           disabled={!nextConcept}
           onClick={() => nextConcept && onNavigate?.(nextConcept)}
+          title={nextConcept ? `Next: #${nextConcept.number} ${nextConcept.title} (→)` : 'No next concept'}
+          aria-label="Navigate to next concept"
         >
-          <span>
-            {nextConcept ? `#${nextConcept.number} ${nextConcept.title}` : 'Next'}
+          <span className={styles.navBtnText}>
+            {nextConcept ? (
+              <>
+                <span className={styles.navBtnNum}>#{nextConcept.number}</span>
+                <span className={styles.navBtnTitle}>{nextConcept.title}</span>
+              </>
+            ) : (
+              'Last Concept'
+            )}
           </span>
+          <kbd className={styles.navKbd}>→</kbd>
           <ChevronRight size={16} />
         </button>
       </footer>
