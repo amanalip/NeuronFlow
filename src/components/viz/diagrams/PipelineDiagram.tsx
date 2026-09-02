@@ -8,6 +8,7 @@ import {
   Position,
   Handle,
   BackgroundVariant,
+  MarkerType,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import styles from './PipelineDiagram.module.css';
@@ -18,6 +19,7 @@ export interface PipelineStage {
   description?: string;
   active?: boolean;
   badge?: string;
+  role?: 'input' | 'layer' | 'output' | 'operation';
 }
 
 export interface PipelineConnection {
@@ -39,29 +41,53 @@ interface NodeData {
   description?: string;
   active?: boolean;
   badge?: string;
+  role?: 'input' | 'layer' | 'output' | 'operation';
   direction?: 'horizontal' | 'vertical';
 }
 
-const CustomNodeComponent: React.FC<{ data: NodeData }> = ({ data }) => {
+const CustomNodeComponent: React.FC<{ data: NodeData; selected?: boolean }> = ({ data, selected }) => {
   const isHorizontal = data.direction !== 'vertical';
+  const role = data.role || 'layer';
+
+  const roleClass =
+    role === 'input'
+      ? styles.inputNode
+      : role === 'output'
+      ? styles.outputNode
+      : role === 'operation'
+      ? styles.opNode
+      : styles.layerNode;
 
   return (
-    <div className={`${styles.customNode} ${data.active ? styles.activeNode : ''}`}>
-      <Handle
-        type="target"
-        position={isHorizontal ? Position.Left : Position.Top}
-        className={styles.nodeHandle}
-      />
+    <div
+      className={`${styles.customNode} ${roleClass} ${data.active ? styles.activeNode : ''} ${
+        selected ? styles.selectedNode : ''
+      }`}
+    >
+      {role !== 'input' && (
+        <Handle
+          type="target"
+          position={isHorizontal ? Position.Left : Position.Top}
+          className={styles.nodeHandle}
+        />
+      )}
       <div className={styles.nodeContent}>
-        {data.badge && <span className={styles.nodeBadge}>{data.badge}</span>}
+        <div className={styles.nodeHeaderRow}>
+          {data.badge && <span className={styles.nodeBadge}>{data.badge}</span>}
+          {role !== 'layer' && (
+            <span className={styles.roleTag}>{role.toUpperCase()}</span>
+          )}
+        </div>
         <div className={styles.nodeTitle}>{data.label}</div>
         {data.description && <div className={styles.nodeSubtitle}>{data.description}</div>}
       </div>
-      <Handle
-        type="source"
-        position={isHorizontal ? Position.Right : Position.Bottom}
-        className={styles.nodeHandle}
-      />
+      {role !== 'output' && (
+        <Handle
+          type="source"
+          position={isHorizontal ? Position.Right : Position.Bottom}
+          className={styles.nodeHandle}
+        />
+      )}
     </div>
   );
 };
@@ -88,6 +114,7 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
           description: stage.description,
           active: stage.active,
           badge: stage.badge,
+          role: stage.role,
           direction,
         },
       };
@@ -100,7 +127,14 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
       source: conn.from,
       target: conn.to,
       label: conn.label,
+      type: 'smoothstep',
       animated: conn.animated !== false,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: 'var(--accent-color)',
+        width: 14,
+        height: 14,
+      },
       style: {
         stroke: 'var(--accent-color)',
         strokeWidth: 2,

@@ -40,10 +40,37 @@
   box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
 }
 
+.inputNode {
+  border-color: rgba(52, 211, 153, 0.4);
+}
+
+.outputNode {
+  border-color: rgba(168, 85, 247, 0.4);
+}
+
+.opNode {
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.layerNode {
+  border-color: var(--border-color);
+}
+
+.selectedNode {
+  box-shadow: 0 0 0 2px var(--accent-color) !important;
+}
+
 .nodeContent {
   display: flex;
   flex-direction: column;
   gap: 3px;
+}
+
+.nodeHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
 }
 
 .nodeBadge {
@@ -52,6 +79,17 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--accent-color);
+}
+
+.roleTag {
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  background-color: var(--bg-primary);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
 }
 
 .nodeTitle {
