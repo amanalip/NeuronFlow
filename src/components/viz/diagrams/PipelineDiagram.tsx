@@ -178,14 +178,14 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
           {showMiniMap && (
             <MiniMap
               nodeStrokeColor={(n) => {
-                const data = n.data as NodeData | undefined;
+                const data = n.data as unknown as NodeData | undefined;
                 if (data?.role === 'input') return '#34d399';
                 if (data?.role === 'output') return '#a855f7';
                 if (data?.role === 'operation') return '#fbbf24';
                 return '#38bdf8';
               }}
               nodeColor={(n) => {
-                const data = n.data as NodeData | undefined;
+                const data = n.data as unknown as NodeData | undefined;
                 if (data?.active) return 'var(--accent-color)';
                 return 'var(--bg-tertiary)';
               }}
