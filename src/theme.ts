@@ -5,13 +5,16 @@ export interface ThemeColors {
   bgSecondary: string;
   bgTertiary: string;
   bgCanvas: string;
+  bgElevated: string;
   border: string;
+  borderHover: string;
   textPrimary: string;
   textSecondary: string;
   textMuted: string;
   accent: string;
   accentHover: string;
   accentMuted: string;
+  accentGlow: string;
   success: string;
   warning: string;
   error: string;
@@ -25,17 +28,20 @@ export interface ThemeColors {
 
 export const themes: Record<ThemeMode, ThemeColors> = {
   dark: {
-    bgPrimary: '#0a0d14',
-    bgSecondary: '#111827',
-    bgTertiary: '#1f2937',
-    bgCanvas: '#05070a',
-    border: '#1f293d',
-    textPrimary: '#f9fafb',
-    textSecondary: '#9ca3af',
-    textMuted: '#6b7280',
+    bgPrimary: '#0d1321',
+    bgSecondary: '#121a2d',
+    bgTertiary: '#1a243d',
+    bgCanvas: '#090d16',
+    bgElevated: '#1f2c48',
+    border: 'rgba(255, 255, 255, 0.08)',
+    borderHover: 'rgba(56, 189, 248, 0.35)',
+    textPrimary: '#f8fafc',
+    textSecondary: '#94a3b8',
+    textMuted: '#64748b',
     accent: '#38bdf8',
     accentHover: '#0ea5e9',
-    accentMuted: 'rgba(56, 189, 248, 0.15)',
+    accentMuted: 'rgba(56, 189, 248, 0.12)',
+    accentGlow: '0 0 16px rgba(56, 189, 248, 0.3)',
     success: '#10b981',
     warning: '#f59e0b',
     error: '#ef4444',
@@ -48,16 +54,19 @@ export const themes: Record<ThemeMode, ThemeColors> = {
   },
   light: {
     bgPrimary: '#ffffff',
-    bgSecondary: '#f8fafc',
+    bgSecondary: '#ffffff',
     bgTertiary: '#f1f5f9',
-    bgCanvas: '#ffffff',
+    bgCanvas: '#f8fafc',
+    bgElevated: '#f8fafc',
     border: '#e2e8f0',
+    borderHover: '#cbd5e1',
     textPrimary: '#0f172a',
     textSecondary: '#475569',
     textMuted: '#94a3b8',
     accent: '#0284c7',
     accentHover: '#0369a1',
-    accentMuted: 'rgba(2, 132, 199, 0.12)',
+    accentMuted: 'rgba(2, 132, 199, 0.08)',
+    accentGlow: '0 0 12px rgba(2, 132, 199, 0.2)',
     success: '#059669',
     warning: '#d97706',
     error: '#dc2626',

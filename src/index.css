@@ -4,20 +4,27 @@
   font-weight: 400;
   color-scheme: dark;
 
-  --bg-primary: #0a0d14;
-  --bg-secondary: #111827;
-  --bg-tertiary: #1f2937;
-  --bg-canvas: #05070a;
-  --border-color: #1f293d;
-  --text-primary: #f9fafb;
-  --text-secondary: #9ca3af;
-  --text-muted: #6b7280;
+  --bg-primary: #0d1321;
+  --bg-secondary: #121a2d;
+  --bg-tertiary: #1a243d;
+  --bg-canvas: #090d16;
+  --bg-elevated: #1f2c48;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   --accent-color: #38bdf8;
   --accent-hover: #0ea5e9;
-  --accent-muted: rgba(56, 189, 248, 0.15);
+  --accent-muted: rgba(56, 189, 248, 0.12);
+  --accent-glow: 0 0 16px rgba(56, 189, 248, 0.3);
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --error-color: #ef4444;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.55);
 
   --font-mono: 'Fira Code', ui-monospace, monospace;
 }
@@ -25,19 +32,26 @@
 [data-theme='light'] {
   color-scheme: light;
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
+  --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
-  --bg-canvas: #ffffff;
+  --bg-canvas: #f8fafc;
+  --bg-elevated: #f8fafc;
   --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
   --accent-color: #0284c7;
   --accent-hover: #0369a1;
-  --accent-muted: rgba(2, 132, 199, 0.12);
+  --accent-muted: rgba(2, 132, 199, 0.08);
+  --accent-glow: 0 0 12px rgba(2, 132, 199, 0.2);
   --success-color: #059669;
   --warning-color: #d97706;
   --error-color: #dc2626;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 14px -2px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.12);
 }
 
 *, *::before, *::after {
@@ -52,14 +66,19 @@ html, body, #root {
   overflow: hidden;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 a {
   color: var(--accent-color);
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 a:hover {
+  color: var(--accent-hover);
   text-decoration: underline;
 }
 
@@ -75,10 +94,31 @@ input, select, textarea {
   color: inherit;
 }
 
+/* Reusable Glass and Surface Utility Classes */
+.glassPanel {
+  background: var(--bg-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+}
+
+.glassCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glassCard:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+}
+
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -86,10 +126,11 @@ input, select, textarea {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: var(--accent-color);
 }
