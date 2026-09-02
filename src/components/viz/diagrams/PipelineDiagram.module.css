@@ -1,9 +1,9 @@
 .container {
   width: 100%;
   height: 320px;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-canvas);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 12px;
   position: relative;
   overflow: hidden;
 }
@@ -15,29 +15,61 @@
 
 .customNode {
   padding: 10px 14px;
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 0.82rem;
   color: var(--text-primary);
   font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
+  min-width: 140px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customNode:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
 }
 
 .activeNode {
   border-color: var(--accent-color);
   background-color: var(--accent-muted);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+}
+
+.nodeContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nodeBadge {
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-color);
 }
 
 .nodeTitle {
   font-weight: 600;
+  font-size: 0.84rem;
   color: var(--text-primary);
 }
 
 .nodeSubtitle {
   font-size: 0.72rem;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.nodeHandle {
+  width: 8px !important;
+  height: 8px !important;
+  background-color: var(--accent-color) !important;
+  border: 2px solid var(--bg-primary) !important;
+  box-shadow: 0 0 6px var(--accent-glow) !important;
 }

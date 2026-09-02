@@ -17,12 +17,14 @@ export interface PipelineStage {
   label: string;
   description?: string;
   active?: boolean;
+  badge?: string;
 }
 
 export interface PipelineConnection {
   from: string;
   to: string;
   label?: string;
+  animated?: boolean;
 }
 
 interface PipelineDiagramProps {
@@ -32,13 +34,34 @@ interface PipelineDiagramProps {
   height?: number | string;
 }
 
-const CustomNodeComponent = ({ data }: { data: { label: string; description?: string; active?: boolean } }) => {
+interface NodeData {
+  label: string;
+  description?: string;
+  active?: boolean;
+  badge?: string;
+  direction?: 'horizontal' | 'vertical';
+}
+
+const CustomNodeComponent: React.FC<{ data: NodeData }> = ({ data }) => {
+  const isHorizontal = data.direction !== 'vertical';
+
   return (
     <div className={`${styles.customNode} ${data.active ? styles.activeNode : ''}`}>
-      <Handle type="target" position={Position.Left} style={{ background: 'var(--accent-color)' }} />
-      <div className={styles.nodeTitle}>{data.label}</div>
-      {data.description && <div className={styles.nodeSubtitle}>{data.description}</div>}
-      <Handle type="source" position={Position.Right} style={{ background: 'var(--accent-color)' }} />
+      <Handle
+        type="target"
+        position={isHorizontal ? Position.Left : Position.Top}
+        className={styles.nodeHandle}
+      />
+      <div className={styles.nodeContent}>
+        {data.badge && <span className={styles.nodeBadge}>{data.badge}</span>}
+        <div className={styles.nodeTitle}>{data.label}</div>
+        {data.description && <div className={styles.nodeSubtitle}>{data.description}</div>}
+      </div>
+      <Handle
+        type="source"
+        position={isHorizontal ? Position.Right : Position.Bottom}
+        className={styles.nodeHandle}
+      />
     </div>
   );
 };
@@ -47,14 +70,14 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
   stages,
   connections,
   direction = 'horizontal',
-  height = 300,
+  height = 320,
 }) => {
   const nodeTypes = useMemo(() => ({ custom: CustomNodeComponent }), []);
 
   const nodes: Node[] = useMemo(() => {
     return stages.map((stage, idx) => {
-      const x = direction === 'horizontal' ? idx * 220 + 40 : 150;
-      const y = direction === 'horizontal' ? 100 : idx * 100 + 40;
+      const x = direction === 'horizontal' ? idx * 240 + 40 : 160;
+      const y = direction === 'horizontal' ? 100 : idx * 120 + 40;
 
       return {
         id: stage.id,
@@ -64,6 +87,8 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
           label: stage.label,
           description: stage.description,
           active: stage.active,
+          badge: stage.badge,
+          direction,
         },
       };
     });
@@ -75,9 +100,23 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
       source: conn.from,
       target: conn.to,
       label: conn.label,
-      animated: true,
-      style: { stroke: 'var(--accent-color)', strokeWidth: 2 },
-      labelStyle: { fill: 'var(--text-secondary)', fontSize: 11 },
+      animated: conn.animated !== false,
+      style: {
+        stroke: 'var(--accent-color)',
+        strokeWidth: 2,
+      },
+      labelStyle: {
+        fill: 'var(--text-secondary)',
+        fontSize: 11,
+        fontFamily: 'var(--font-mono)',
+      },
+      labelBgPadding: [6, 4] as [number, number],
+      labelBgBorderRadius: 4,
+      labelBgStyle: {
+        fill: 'var(--bg-primary)',
+        stroke: 'var(--border-color)',
+        strokeWidth: 1,
+      },
     }));
   }, [connections]);
 
@@ -89,9 +128,15 @@ export const PipelineDiagram: React.FC<PipelineDiagramProps> = ({
           edges={edges}
           nodeTypes={nodeTypes}
           fitView
+          fitViewOptions={{ padding: 0.2 }}
           attributionPosition="bottom-right"
         >
-          <Background variant={BackgroundVariant.Dots} gap={16} size={1} color="var(--border-color)" />
+          <Background
+            variant={BackgroundVariant.Dots}
+            gap={18}
+            size={1.5}
+            color="var(--border-color)"
+          />
           <Controls showInteractive={false} />
         </ReactFlow>
       </div>
