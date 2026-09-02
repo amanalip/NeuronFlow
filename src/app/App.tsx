@@ -5,6 +5,7 @@ import { MainCanvas } from '../components/layout/MainCanvas';
 import { ExplanationPanel } from '../components/layout/ExplanationPanel';
 import { QuickSearchModal } from '../components/layout/QuickSearchModal';
 import { KeyboardShortcutsModal } from '../components/layout/KeyboardShortcutsModal';
+import { KnowledgeGraphModal } from '../components/layout/KnowledgeGraphModal';
 import { useRouter } from './Router';
 import { useStore } from '../store/useStore';
 import { Concept } from '../model/types';
@@ -17,6 +18,7 @@ export const App: React.FC = () => {
   const theme = useStore((state) => state.theme);
   const [searchOpen, setSearchOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [graphOpen, setGraphOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -81,6 +83,7 @@ export const App: React.FC = () => {
         totalConcepts={CONCEPTS.length}
         onOpenSearch={() => setSearchOpen(true)}
         onOpenShortcuts={() => setShortcutsOpen(true)}
+        onOpenGraph={() => setGraphOpen(true)}
       />
       <div className={styles.workspace}>
         <Sidebar
@@ -107,6 +110,12 @@ export const App: React.FC = () => {
       <KeyboardShortcutsModal
         isOpen={shortcutsOpen}
         onClose={() => setShortcutsOpen(false)}
+      />
+
+      <KnowledgeGraphModal
+        isOpen={graphOpen}
+        onClose={() => setGraphOpen(false)}
+        onSelectConcept={handleSelectConcept}
       />
     </div>
   );
